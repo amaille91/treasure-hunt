@@ -7,5 +7,4 @@ public class Lexer {
 		}
 		throw new LineFormatException(toLex, "The map line format should start with a 'C' and have three components separated by dashes");
 	}
-
 }

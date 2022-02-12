@@ -18,6 +18,13 @@ public class LexerTest {
 		assertThat(mapLineToken.getHorizontalNbOfBoxes()).isEqualTo(15);
 		assertThat(mapLineToken.getVerticalNbOfBoxes()).isEqualTo(20);
 	}
+	
+	@Test
+	void the_empty_string_should_result_in_LineFormatException() throws Throwable {
+		String emptyString = "";
+		assertException(LineFormatException.class, assertLineFormatExceptionWithLine(emptyString),
+				() -> Lexer.toLineToken(emptyString));
+	}
 
 	@Test
 	void lines_not_constituted_of_less_than_3_components_separated_by_dashes_should_result_in_LineFormatException()
