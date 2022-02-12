@@ -1,4 +1,4 @@
-public class MapLineToken {
+public class MapLineToken implements LineToken {
 
 	private int horizontalNbOfBoxes;
 	private int verticalNbOfBoxes;

@@ -1,6 +1,6 @@
 public class Lexer {
 	
-	public static MapLineToken toLineToken(String toLex) {
+	public static LineToken toLineToken(String toLex) {
 		String[] splitted = toLex.split("\\s*-\\s*");
 		if(splitted.length == 3 && splitted[0].equals("C")) {
 			return new MapLineToken(Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2]));

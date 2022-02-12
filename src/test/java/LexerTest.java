@@ -23,11 +23,14 @@ public class LexerTest {
 		@Test
 		void parsing_a_map_line_should_result_in_a_mapLine_object() throws Exception {
 			String mapLineStr = "C - 15 - 20";
-			
-			MapLineToken mapLineToken = Lexer.toLineToken(mapLineStr);
-			
-			assertThat(mapLineToken.getHorizontalNbOfBoxes()).isEqualTo(15);
-			assertThat(mapLineToken.getVerticalNbOfBoxes()).isEqualTo(20);
+
+			LineToken lineToken = Lexer.toLineToken(mapLineStr);
+
+			assertThat(lineToken).isInstanceOfSatisfying(MapLineToken.class, mapLineToken -> {
+
+				assertThat(mapLineToken.getHorizontalNbOfBoxes()).isEqualTo(15);
+				assertThat(mapLineToken.getVerticalNbOfBoxes()).isEqualTo(20);
+			});
 		}
 		
 		@Test
@@ -59,6 +62,55 @@ public class LexerTest {
 			assertThrows(NumberFormatException.class, () -> Lexer.toLineToken(mapLineStr));
 		}
 
+		@Test
+		void malformed_numbers_in_map_lines_should_result_in_NumberFormatException_second_number() throws Exception {
+			String mapLineStr = "C - 15 - 2a0";
+			assertThrows(NumberFormatException.class, () -> Lexer.toLineToken(mapLineStr));
+		}
+	}
+	
+	@Nested
+	class ParsingMountainsLines {
+		
+		@Test
+		void parsing_a_mountain_line_should_result_in_a_mountainLine_object() throws Exception {
+			String mapLineStr = "M - 2 - 22";
+
+			LineToken lineToken = Lexer.toLineToken(mapLineStr);
+
+			assertThat(lineToken).isInstanceOfSatisfying(MoutainLineToken.class,
+					mapLineToken -> assertThat(mapLineToken.getPosition()).usingRecursiveComparison().isEqualTo(new Position(2, 22)));
+		}
+		
+		@Test
+		void lines_not_constituted_of_less_than_3_components_separated_by_dashes_should_result_in_LineFormatException()
+				throws Throwable {
+			String mapLineStr = "M - 20";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(mapLineStr),
+					() -> Lexer.toLineToken(mapLineStr));
+		}
+		
+		@Test
+		void lines_not_constituted_of_more_than_3_components_separated_by_dashes_should_result_in_LineFormatException()
+				throws Throwable {
+			String mapLineStr = "M - 20 - 15 - 12";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(mapLineStr),
+					() -> Lexer.toLineToken(mapLineStr));
+		}
+		
+		@Test
+		void lines_not_starting_with_C_should_result_in_LineFormatException() throws Throwable {
+			String mapLineStr = "anythingOtherThanM - 20 - 15";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(mapLineStr),
+					() -> Lexer.toLineToken(mapLineStr));
+		}
+		
+		@Test
+		void malformed_numbers_in_map_lines_should_result_in_NumberFormatException_first_number() throws Exception {
+			String mapLineStr = "C - 15toto - 20";
+			assertThrows(NumberFormatException.class, () -> Lexer.toLineToken(mapLineStr));
+		}
+		
 		@Test
 		void malformed_numbers_in_map_lines_should_result_in_NumberFormatException_second_number() throws Exception {
 			String mapLineStr = "C - 15 - 2a0";
