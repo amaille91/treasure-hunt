@@ -242,16 +242,23 @@ public class LexerTest {
 		}
 		
 		@Test
-		void malformed_orientation_in_adventurers_lines_should_result_in_OrientationFormatException_second_number() throws Throwable {
+		void more_than_one_char_in_orientation_in_adventurers_lines_should_result_in_LineFormatException() throws Throwable {
 			String adventurerLineStr = "A - Indiana - 20 - 15 - toto - AGADDA";
-			assertException(OrientationFormatException.class, assertOrientationFormatExceptionWithLine("toto"),
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(adventurerLineStr),
 					() -> Lexer.toLineToken(adventurerLineStr));
 		}
 		
 		@Test
-		void malformed_action_in_adventurers_lines_should_result_in_ActionFormatException_second_number() throws Throwable {
-			String adventurerLineStr = "A - Indiana - 20 - 15 - toto - AGATDDA";
-			assertException(ActionFormatException.class, assertActionFormatExceptionWithLine("AGATDDA"),
+		void illegal_orientation_in_adventurers_lines_should_result_in_OrientationFormatException() throws Throwable {
+			String adventurerLineStr = "A - Indiana - 20 - 15 - T - AGADDA";
+			assertException(OrientationFormatException.class, assertOrientationFormatExceptionWithLine('T'),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void malformed_action_in_adventurers_lines_should_result_in_ActionFormatException() throws Throwable {
+			String adventurerLineStr = "A - Indiana - 20 - 15 - S - AGATDDA";
+			assertException(ActionFormatException.class, assertActionFormatExceptionWithLine('T'),
 					() -> Lexer.toLineToken(adventurerLineStr));
 		}
 	}
@@ -273,12 +280,12 @@ public class LexerTest {
 		return lfe -> assertThat(lfe.getMalformedLine()).isEqualTo(expectedFaultyLine);
 	}
 	
-	private Consumer<OrientationFormatException> assertOrientationFormatExceptionWithLine(String expectedFaultyOrientation) {
+	private Consumer<OrientationFormatException> assertOrientationFormatExceptionWithLine(char expectedFaultyOrientation) {
 		return ofe -> assertThat(ofe.getMalformedOrientation()).isEqualTo(expectedFaultyOrientation);
 	}
 	
-	private Consumer<ActionFormatException> assertActionFormatExceptionWithLine(String expectedFaultyActions) {
-		return ofe -> assertThat(ofe.getMalformedActions()).isEqualTo(expectedFaultyActions);
+	private Consumer<ActionFormatException> assertActionFormatExceptionWithLine(char expectedFaultyActions) {
+		return ofe -> assertThat(ofe.getMalformedAction()).isEqualTo(expectedFaultyActions);
 	}
 
 }

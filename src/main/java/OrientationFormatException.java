@@ -1,14 +1,14 @@
 
 public class OrientationFormatException extends RuntimeException {
 	private static final long serialVersionUID = -8942990763378381842L;
-	private String malformedOrientation;
+	private char malformedOrientation;
 
-	public OrientationFormatException(String malformedOrientation, String message) {
+	public OrientationFormatException(char string, String message) {
 		super(message);
-		this.malformedOrientation = malformedOrientation;
+		this.malformedOrientation = string;
 	}
 
-	public String getMalformedOrientation() {
+	public char getMalformedOrientation() {
 		return malformedOrientation;
 	}
 

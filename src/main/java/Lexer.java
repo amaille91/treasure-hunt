@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.stream.Collectors;
+
 public class Lexer {
 
 	public static LineToken toLineToken(String toLex) {
@@ -22,6 +25,21 @@ public class Lexer {
 			}
 			throw new LineFormatException(toLex,
 					"The treasure line format should start with a 'T' and have four components separated by dashes");
+		case "A":
+			if (splitted.length == 6) {
+				String orientationStr = splitted[4];
+				if(orientationStr.length() != 1) {
+					throw new LineFormatException(toLex, "The starting orientation of an adventurer must only be one letter");
+				}
+				return new AdventurerLineToken(
+						splitted[1],
+						Integer.parseInt(splitted[2]),
+						Integer.parseInt(splitted[3]),
+						Orientation.parseOrientation(orientationStr.charAt(0)),
+						splitted[5].chars().mapToObj(intChar -> AdventurerAction.parseAction((char) intChar)).collect(Collectors.toCollection(LinkedList::new)));
+			}
+			throw new LineFormatException(toLex,
+					"The adventurer line format should start with a 'A' and have six components separated by dashes");
 		default:
 			throw new LineFormatException(toLex,
 					"A line should start with either 'C', 'M', 'T' or 'A'");

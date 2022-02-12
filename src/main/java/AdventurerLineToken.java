@@ -1,21 +1,34 @@
-import java.util.List;
+import java.util.Queue;
 
 public class AdventurerLineToken implements LineToken {
 
+	private String name;
+	private Position startingPosition;
+	private Orientation startingOrientation;
+	private Queue<AdventurerAction> adventurerActions;
+
+	public AdventurerLineToken(String name, int horizontalPosition, int verticalPosition, Orientation startingOrientation,
+			Queue<AdventurerAction> adventurerActions) {
+		this.name = name;
+		this.startingPosition = new Position(horizontalPosition, verticalPosition);
+		this.startingOrientation = startingOrientation;
+		this.adventurerActions = adventurerActions;
+	}
+
 	public Position getStartingPosition() {
-		throw new UnsupportedOperationException("not yet implemented");
+		return startingPosition;
 	}
 
 	public Orientation getStartingOrientation() {
-		throw new UnsupportedOperationException("not yet implemented");
+		return startingOrientation;
 	}
 
 	public String getName() {
-		throw new UnsupportedOperationException("not yet implemented");
+		return name;
 	}
 
-	public List<AdventurerAction> getSequenceOfAction() {
-		throw new UnsupportedOperationException("not yet implemented");
+	public Queue<AdventurerAction> getSequenceOfAction() {
+		return adventurerActions;
 	}
 
 }
