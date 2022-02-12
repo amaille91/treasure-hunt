@@ -175,6 +175,86 @@ public class LexerTest {
 			assertThrows(NumberFormatException.class, () -> Lexer.toLineToken(treasureLineStr));
 		}
 	}
+	
+	@Nested
+	class ParsingAdventurersLines {
+		
+		@Test
+		void parsing_a_treasure_line_should_result_in_a_treasureLine_object() throws Exception {
+			String mapLineStr = "A  - Indiana - 2 - 25 - N   - AGGDA";
+			
+			LineToken lineToken = Lexer.toLineToken(mapLineStr);
+			
+			assertThat(lineToken).isInstanceOfSatisfying(AdventurerLineToken.class,
+					adventurerLineToken -> {
+						assertThat(adventurerLineToken.getName()).isEqualTo("Indiana");
+						assertThat(adventurerLineToken.getStartingPosition()).usingRecursiveComparison().isEqualTo(new Position(2, 25));
+						assertThat(adventurerLineToken.getStartingOrientation()).isEqualTo(Orientation.NORTH);
+						assertThat(adventurerLineToken.getSequenceOfAction()).containsExactly(
+								AdventurerAction.ADVANCE,
+								AdventurerAction.TURN_LEFT,
+								AdventurerAction.TURN_LEFT,
+								AdventurerAction.TURN_RIGHT,
+								AdventurerAction.ADVANCE);
+					});
+		}
+		
+		@Test
+		void lines_not_constituted_of_less_than_6_components_separated_by_dashes_should_result_in_LineFormatException()
+				throws Throwable {
+			String adventurerLineStr = "A - Indiana - 20 - 3 - S";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(adventurerLineStr),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void lines_not_constituted_of_more_than_6_components_separated_by_dashes_should_result_in_LineFormatException()
+				throws Throwable {
+			String adventurerLineStr = "A - Indiana - 20 - 15 - E - AGADDA - extraArg";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(adventurerLineStr),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void lines_not_starting_with_A_should_result_in_LineFormatException() throws Throwable {
+			String adventurerLineStr = "R - 20 - 15 - 1";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(adventurerLineStr),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void names_containing_dashes_should_result_in_LineFormatException() throws Throwable {
+			String adventurerLineStr = "A - Jean-Indiana - 20 - 15 - E - AGADDA";
+			assertException(LineFormatException.class, assertLineFormatExceptionWithLine(adventurerLineStr),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void malformed_numbers_in_adventurers_lines_should_result_in_NumberFormatException_first_number() throws Exception {
+			String adventurerLineStr = "A - Indiana - ab20 - 15 - E - AGADDA";
+			assertThrows(NumberFormatException.class, () -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void malformed_numbers_in_adventurers_lines_should_result_in_NumberFormatException_second_number() throws Exception {
+			String treasureLineStr = "A - Indiana - 20 - 15h - E - AGADDA";
+			assertThrows(NumberFormatException.class, () -> Lexer.toLineToken(treasureLineStr));
+		}
+		
+		@Test
+		void malformed_orientation_in_adventurers_lines_should_result_in_OrientationFormatException_second_number() throws Throwable {
+			String adventurerLineStr = "A - Indiana - 20 - 15 - toto - AGADDA";
+			assertException(OrientationFormatException.class, assertOrientationFormatExceptionWithLine("toto"),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+		
+		@Test
+		void malformed_action_in_adventurers_lines_should_result_in_ActionFormatException_second_number() throws Throwable {
+			String adventurerLineStr = "A - Indiana - 20 - 15 - toto - AGATDDA";
+			assertException(ActionFormatException.class, assertActionFormatExceptionWithLine("AGATDDA"),
+					() -> Lexer.toLineToken(adventurerLineStr));
+		}
+	}
 
 	private static <E extends Exception> void assertException(Class<E> exceptionClass, Consumer<E> exceptionAssertions,
 			Executable executableToTest) throws Throwable {
@@ -191,6 +271,14 @@ public class LexerTest {
 
 	private Consumer<LineFormatException> assertLineFormatExceptionWithLine(String expectedFaultyLine) {
 		return lfe -> assertThat(lfe.getMalformedLine()).isEqualTo(expectedFaultyLine);
+	}
+	
+	private Consumer<OrientationFormatException> assertOrientationFormatExceptionWithLine(String expectedFaultyOrientation) {
+		return ofe -> assertThat(ofe.getMalformedOrientation()).isEqualTo(expectedFaultyOrientation);
+	}
+	
+	private Consumer<ActionFormatException> assertActionFormatExceptionWithLine(String expectedFaultyActions) {
+		return ofe -> assertThat(ofe.getMalformedActions()).isEqualTo(expectedFaultyActions);
 	}
 
 }
