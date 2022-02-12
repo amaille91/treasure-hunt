@@ -78,7 +78,7 @@ public class LexerTest {
 
 			LineToken lineToken = Lexer.toLineToken(mapLineStr);
 
-			assertThat(lineToken).isInstanceOfSatisfying(MoutainLineToken.class,
+			assertThat(lineToken).isInstanceOfSatisfying(MountainLineToken.class,
 					mapLineToken -> assertThat(mapLineToken.getPosition()).usingRecursiveComparison().isEqualTo(new Position(2, 22)));
 		}
 		
