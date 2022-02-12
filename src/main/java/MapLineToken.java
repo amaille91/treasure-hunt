@@ -1,11 +1,19 @@
 public class MapLineToken {
 
+	private int horizontalNbOfBoxes;
+	private int verticalNbOfBoxes;
+
+	public MapLineToken(int horizontalNbOfBoxes, int verticalNbOfBoxes) {
+		this.horizontalNbOfBoxes = horizontalNbOfBoxes;
+		this.verticalNbOfBoxes = verticalNbOfBoxes;
+	}
+
 	public int getHorizontalNbOfBoxes() {
-		throw new RuntimeException("not yet implemented");
+		return this.horizontalNbOfBoxes;
 	}
 
 	public int getVerticalNbOfBoxes() {
-		throw new RuntimeException("not yet implemented");
+		return this.verticalNbOfBoxes;
 	}
 
 }
