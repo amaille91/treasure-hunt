@@ -57,4 +57,18 @@ public class PrinterTest {
 		
 		assertThat(lines).endsWith("A - Adventurer2 - 1 - 3 - E - 0", "A - Adventurer - 2 - 2 - W - 3");
 	}
+	
+	@Test
+	void adventurers_should_be_printed_even_if_they_are_on_a_treasure_tile() throws Exception {
+		Treasure treasureWithAdventurer = new Treasure(1);
+		treasureWithAdventurer.withAdventurer(new Adventurer("Adventurer2", Orientation.EAST, List.of(), 0, 1));
+		List<String> lines = Printer.toStrings(3, 4,
+				Map.of( new Position(2, 3), new Mountain(),
+						new Position(2, 2), new Adventurer("Adventurer", Orientation.WEST, List.of(), 3, 0),
+						new Position(1, 2), new Treasure(2),
+						new Position(0, 0), new Mountain(),
+						new Position(0, 2), treasureWithAdventurer));
+		
+		assertThat(lines).endsWith("A - Adventurer2 - 0 - 2 - E - 0", "A - Adventurer - 2 - 2 - W - 3");
+	}
 }
