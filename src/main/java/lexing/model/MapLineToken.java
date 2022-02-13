@@ -1,3 +1,5 @@
+package lexing.model;
+
 public class MapLineToken implements LineToken {
 
 	private int horizontalNbOfBoxes;

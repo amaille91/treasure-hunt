@@ -1,3 +1,4 @@
+package lexing.exceptions;
 
 public class LineFormatException extends RuntimeException {
 	private static final long serialVersionUID = -8011193620850397944L;

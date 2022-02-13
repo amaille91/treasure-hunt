@@ -1,4 +1,9 @@
+package lexing.model;
 import java.util.Queue;
+
+import simulation.model.AdventurerAction;
+import simulation.model.Orientation;
+import simulation.model.Position;
 
 public class AdventurerLineToken implements LineToken {
 

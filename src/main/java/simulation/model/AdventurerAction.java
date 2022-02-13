@@ -1,3 +1,5 @@
+package simulation.model;
+import lexing.exceptions.ActionFormatException;
 
 public enum AdventurerAction {
 	ADVANCE, TURN_RIGHT, TURN_LEFT;
