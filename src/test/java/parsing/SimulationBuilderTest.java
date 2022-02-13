@@ -12,102 +12,178 @@ import lexing.model.AdventurerLineToken;
 import lexing.model.MapLineToken;
 import lexing.model.MountainLineToken;
 import lexing.model.TreasureLineToken;
+import parsing.exceptions.AlreadyOccupiedSpaceException;
 import parsing.exceptions.IllegalMapSizeException;
 import parsing.exceptions.OutboundTerrainException;
 import simulation.model.AdventurerAction;
 
 public class SimulationBuilderTest {
-	
+
 	@Nested
 	class StrictlyPositiveMapSizes {
 
 		@Test
-		void initializing_builder_with_negative_sizes_should_result_in_IllegalMapSizeException_first_size() throws Exception {
+		void initializing_builder_with_negative_sizes_should_result_in_IllegalMapSizeException_first_size()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(-1, 10);
-			
+
 			assertThrows(IllegalMapSizeException.class, () -> new SimulationBuilder(mapLineToken));
 		}
-		
+
 		@Test
-		void initializing_builder_with_negative_sizes_should_result_in_IllegalMapSizeException_second_size() throws Exception {
+		void initializing_builder_with_negative_sizes_should_result_in_IllegalMapSizeException_second_size()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(3, -1);
-			
+
 			assertThrows(IllegalMapSizeException.class, () -> new SimulationBuilder(mapLineToken));
 		}
-		
+
 		@Test
-		void initializing_builder_with_zero_size_should_result_in_IllegalMapSizeException_first_size() throws Exception {
+		void initializing_builder_with_zero_size_should_result_in_IllegalMapSizeException_first_size()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(0, 10);
-			
+
 			assertThrows(IllegalMapSizeException.class, () -> new SimulationBuilder(mapLineToken));
 		}
-		
+
 		@Test
-		void initializing_builder_with_zero_sizes_should_result_in_IllegalMapSizeException_second_size() throws Exception {
+		void initializing_builder_with_zero_sizes_should_result_in_IllegalMapSizeException_second_size()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(3, 0);
-			
+
 			assertThrows(IllegalMapSizeException.class, () -> new SimulationBuilder(mapLineToken));
 		}
-		
+
 	}
-	
+
 	@Nested
 	class TerrainInsideMap {
-		
+
 		@Test
-		void a_mountain_with_strictly_negative_position_should_result_in_OutboundTerrainException_first_coordinate() throws Exception {
+		void a_mountain_with_strictly_negative_position_should_result_in_OutboundTerrainException_first_coordinate()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(10, 15);
-			
+
 			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
-			
+
 			assertThrows(OutboundTerrainException.class, () -> builder.withLine(new MountainLineToken(-1, 3)));
 		}
-		
+
 		@Test
-		void a_mountain_with_strictly_negative_position_should_result_in_OutboundTerrainException_second_coordinate() throws Exception {
+		void a_mountain_with_strictly_negative_position_should_result_in_OutboundTerrainException_second_coordinate()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(10, 15);
-			
+
 			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
-			
+
 			assertThrows(OutboundTerrainException.class, () -> builder.withLine(new MountainLineToken(9, -3)));
 		}
-		
+
 		@Test
-		void a_treasure_with_strictly_negative_position_should_result_in_OutboundTerrainException_first_coordinate() throws Exception {
+		void a_treasure_with_strictly_negative_position_should_result_in_OutboundTerrainException_first_coordinate()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(10, 15);
-			
+
 			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
-			
+
 			assertThrows(OutboundTerrainException.class, () -> builder.withLine(new TreasureLineToken(-9, 3, 1)));
 		}
-		
+
 		@Test
-		void a_treasure_with_strictly_negative_position_should_result_in_OutboundTerrainException_second_coordinate() throws Exception {
+		void a_treasure_with_strictly_negative_position_should_result_in_OutboundTerrainException_second_coordinate()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(10, 15);
-			
+
 			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
-			
+
 			assertThrows(OutboundTerrainException.class, () -> builder.withLine(new TreasureLineToken(0, -1, 1)));
 		}
-		
+
 		@Test
-		void a_adventurer_with_strictly_negative_position_should_result_in_OutboundTerrainException_first_coordinate() throws Exception {
+		void a_adventurer_with_strictly_negative_position_should_result_in_OutboundTerrainException_first_coordinate()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(10, 15);
-			
+
 			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
-			
-			assertThrows(OutboundTerrainException.class, () -> builder.withLine(new AdventurerLineToken("adventurer's name", -1, 1, SOUTH, new LinkedList<AdventurerAction>())));
+
+			assertThrows(OutboundTerrainException.class, () -> builder.withLine(
+					new AdventurerLineToken("adventurer's name", -1, 1, SOUTH, new LinkedList<AdventurerAction>())));
 		}
-		
+
 		@Test
-		void a_adventurer_with_strictly_negative_position_should_result_in_OutboundTerrainException_second_coordinate() throws Exception {
+		void a_adventurer_with_strictly_negative_position_should_result_in_OutboundTerrainException_second_coordinate()
+				throws Exception {
 			MapLineToken mapLineToken = new MapLineToken(10, 15);
-			
+
 			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
-			
-			assertThrows(OutboundTerrainException.class, () -> builder.withLine(new AdventurerLineToken("adventurer's name", -1, 1, SOUTH, new LinkedList<AdventurerAction>())));
+
+			assertThrows(OutboundTerrainException.class, () -> builder.withLine(
+					new AdventurerLineToken("adventurer's name", -1, 1, SOUTH, new LinkedList<AdventurerAction>())));
 		}
 	}
-	
+
+	@Nested
+	class TerrainCannotStack {
+
+		@Test
+		void a_mountain_on_top_of_a_treasure_should_result_in_AlreadyOccupiedSpaceException() throws Exception {
+			MapLineToken mapLineToken = new MapLineToken(10, 15);
+
+			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
+			builder.withLine(new TreasureLineToken(2, 3, 1));
+			
+			assertThrows(AlreadyOccupiedSpaceException.class, () -> builder.withLine(new MountainLineToken(2, 3)));
+		}
+		
+		@Test
+		void a_mountain_on_top_of_an_adventurer_should_result_in_AlreadyOccupiedSpaceException() throws Exception {
+			MapLineToken mapLineToken = new MapLineToken(10, 15);
+			
+			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
+			builder.withLine(new AdventurerLineToken("adventurer's name", 2, 1, SOUTH, new LinkedList<AdventurerAction>()));
+			
+			assertThrows(AlreadyOccupiedSpaceException.class, () -> builder.withLine(new MountainLineToken(2, 1)));
+		}
+		
+		@Test
+		void a_treasure_on_top_of_a_mountain_should_result_in_AlreadyOccupiedSpaceException() throws Exception {
+			MapLineToken mapLineToken = new MapLineToken(10, 15);
+			
+			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
+			builder.withLine(new MountainLineToken(2, 3));
+			
+			assertThrows(AlreadyOccupiedSpaceException.class, () -> builder.withLine(new TreasureLineToken(2, 3, 1)));
+		}
+		
+		@Test
+		void a_treasure_on_top_of_an_adventurer_should_result_in_AlreadyOccupiedSpaceException() throws Exception {
+			MapLineToken mapLineToken = new MapLineToken(10, 15);
+			
+			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
+			builder.withLine(new AdventurerLineToken("adventurer's name", 2, 1, SOUTH, new LinkedList<AdventurerAction>()));
+			
+			assertThrows(AlreadyOccupiedSpaceException.class, () -> builder.withLine(new TreasureLineToken(2, 1, 1)));
+		}
+		
+		@Test
+		void an_adventuer_on_top_of_a_mountain_should_result_in_AlreadyOccupiedSpaceException() throws Exception {
+			MapLineToken mapLineToken = new MapLineToken(10, 15);
+			
+			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
+			builder.withLine(new MountainLineToken(2, 3));
+			
+			assertThrows(AlreadyOccupiedSpaceException.class, () -> builder.withLine(new AdventurerLineToken("adventurer's name", 2, 3, SOUTH, new LinkedList<AdventurerAction>())));
+		}
+		
+		@Test
+		void an_adventurer_on_top_of_a_treasure_should_result_in_AlreadyOccupiedSpaceException() throws Exception {
+			MapLineToken mapLineToken = new MapLineToken(10, 15);
+			
+			SimulationBuilder builder = new SimulationBuilder(mapLineToken);
+			builder.withLine(new TreasureLineToken(2, 1, 1));
+			
+			assertThrows(AlreadyOccupiedSpaceException.class, () -> builder.withLine(new AdventurerLineToken("adventurer's name", 2, 1, SOUTH, new LinkedList<AdventurerAction>())));
+		}
+	}
 
 }
