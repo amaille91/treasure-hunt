@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import lexing.model.LineToken;
 import lexing.model.MapLineToken;
 import parsing.exceptions.NoMapException;
+import parsing.exceptions.TooManyMapsException;
 import simulation.model.Simulation;
 
 public class Parser {
@@ -20,6 +21,10 @@ public class Parser {
 		List<LineToken> mapLines = tokens.stream().filter(MapLineToken.class::isInstance).collect(Collectors.toList());
 		if(mapLines.size() < 1) {
 			throw new NoMapException();
+		}
+		
+		if(mapLines.size() > 1) {
+			throw new TooManyMapsException();
 		}
 		throw new UnsupportedOperationException("not yet implemented");
 	}
