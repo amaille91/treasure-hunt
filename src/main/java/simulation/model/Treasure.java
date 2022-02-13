@@ -54,4 +54,8 @@ public class Treasure implements Terrain {
 		return Objects.equals(adventurer, other.adventurer) && numberOfTreasures == other.numberOfTreasures;
 	}
 
+	public int getNumber() {
+		return numberOfTreasures;
+	}
+
 }

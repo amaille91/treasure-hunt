@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import simulation.model.Mountain;
 import simulation.model.Position;
 import simulation.model.Terrain;
+import simulation.model.Treasure;
 
 public class Printer {
 
@@ -29,6 +30,14 @@ public class Printer {
 		    .filter(entry -> Mountain.class.isInstance(entry.getValue()))
 		    .sorted(POSITION_COMPARATOR)
 		    .forEach(entry -> result.add(String.format("M - %d - %d", entry.getKey().getHorizontalPosition(), entry.getKey().getVerticalPosition())));
+		
+		finalState.entrySet().stream()
+		    .filter(entry -> Treasure.class.isInstance(entry.getValue()))
+		    .sorted(POSITION_COMPARATOR)
+		    .forEach(entry -> result.add(String.format("T - %d - %d - %d",
+		    				entry.getKey().getHorizontalPosition(),
+		    				entry.getKey().getVerticalPosition(),
+		    				((Treasure) entry.getValue()).getNumber())));
 
 		return result;
 	}
