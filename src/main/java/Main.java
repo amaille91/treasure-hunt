@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import lexing.Lexer;
 import lexing.model.LineToken;
-import parsing.Parser;
-import simulation.model.Simulation;
 
 public class Main {
 	
@@ -20,8 +18,6 @@ public class Main {
 		List<String> fileLines = Files.readAllLines(Path.of(args[0]));
 		
 		LinkedList<LineToken> tokens = fileLines.stream().map(Lexer::toLineToken).collect(Collectors.toCollection(LinkedList::new));
-		
-		Simulation simulation = Parser.parse(tokens);
 	}
 
 }
