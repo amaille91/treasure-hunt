@@ -1,3 +1,6 @@
+package lexing.model;
+import simulation.model.Position;
+
 public class TreasureLineToken implements LineToken {
 
 	private Position position;

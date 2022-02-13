@@ -1,3 +1,4 @@
+package lexing;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -7,6 +8,18 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+
+import lexing.exceptions.ActionFormatException;
+import lexing.exceptions.LineFormatException;
+import lexing.exceptions.OrientationFormatException;
+import lexing.model.AdventurerLineToken;
+import lexing.model.LineToken;
+import lexing.model.MapLineToken;
+import lexing.model.MountainLineToken;
+import lexing.model.TreasureLineToken;
+import simulation.model.AdventurerAction;
+import simulation.model.Orientation;
+import simulation.model.Position;
 
 public class LexerTest {
 

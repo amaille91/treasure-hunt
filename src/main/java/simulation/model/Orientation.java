@@ -1,3 +1,5 @@
+package simulation.model;
+import lexing.exceptions.OrientationFormatException;
 
 public enum Orientation {
 	NORTH, EAST, SOUTH, WEST;

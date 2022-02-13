@@ -1,3 +1,4 @@
+package lexing.exceptions;
 
 public class OrientationFormatException extends RuntimeException {
 	private static final long serialVersionUID = -8942990763378381842L;

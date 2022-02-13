@@ -1,3 +1,5 @@
+package lexing.model;
+import simulation.model.Position;
 
 public class MountainLineToken implements LineToken {
 
