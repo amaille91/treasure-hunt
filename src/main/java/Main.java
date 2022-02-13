@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 import lexing.Lexer;
 import lexing.model.LineToken;
 import parsing.Parser;
-import simulation.model.Simulation;
+import printing.Printer;
+import simulation.Simulation;
 
 public class Main {
 	
@@ -17,11 +18,15 @@ public class Main {
 			throw new IllegalStateException("Treasure hunt should be started with a command-line argument specifying the location of the input file");
 		}
 		
-		List<String> fileLines = Files.readAllLines(Path.of(args[0]));
+		Path inputFilePath = Path.of(args[0]);
+		List<String> fileLines = Files.readAllLines(inputFilePath);
 		
 		LinkedList<LineToken> tokens = fileLines.stream().map(Lexer::toLineToken).collect(Collectors.toCollection(LinkedList::new));
+		Simulation simulation = new Parser(tokens).getSimulation();
 		
-		Simulation simulation = Parser.parse(tokens);
+		List<String> output = Printer.toStrings(simulation.getNbHorizontalBoxes(), simulation.getNbVerticalBoxes(), simulation.getFinalState());
+		
+		Files.write(Path.of(inputFilePath.getParent().toString(), "output.txt"), String.join("\n", output).getBytes());
 	}
 
 }

@@ -2,7 +2,7 @@ package simulation.model;
 
 import java.util.Objects;
 
-public class Position {
+public class Position implements Comparable<Position> {
 
 	private int horizontalPosition;
 	private int verticalPosition;
@@ -35,6 +35,17 @@ public class Position {
 			return false;
 		Position other = (Position) obj;
 		return horizontalPosition == other.horizontalPosition && verticalPosition == other.verticalPosition;
+	}
+
+	@Override
+	public int compareTo(Position o) {
+		if(this.horizontalPosition < o.horizontalPosition) {
+			return -1;
+		}
+		if(this.horizontalPosition > o.horizontalPosition) {
+			return 1;
+		}
+		return Integer.compare(this.verticalPosition, o.verticalPosition);
 	}
 
 }

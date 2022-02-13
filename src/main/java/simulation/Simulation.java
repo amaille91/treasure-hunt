@@ -154,4 +154,12 @@ public class Simulation {
 		}
 	}
 
+	public int getNbHorizontalBoxes() {
+		return horizontalNbOfBoxes;
+	}
+
+	public int getNbVerticalBoxes() {
+		return verticalNbOfBoxes;
+	}
+
 }

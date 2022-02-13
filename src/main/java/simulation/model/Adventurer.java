@@ -122,4 +122,16 @@ public class Adventurer implements Terrain, Comparable<Adventurer> {
 		return true;
 	}
 
+	public String getName() {
+		return this.name;
+	}
+
+	public Orientation getOrientation() {
+		return orientation;
+	}
+
+	public int getNumberOfPossessedTreasures() {
+		return possessedTreasures;
+	}
+
 }
