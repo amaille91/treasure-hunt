@@ -1,8 +1,13 @@
 package parsing;
 
+import lexing.model.AdventurerLineToken;
 import lexing.model.LineToken;
 import lexing.model.MapLineToken;
+import lexing.model.MountainLineToken;
+import lexing.model.TreasureLineToken;
 import parsing.exceptions.IllegalMapSizeException;
+import parsing.exceptions.OutboundTerrainException;
+import simulation.model.Position;
 
 public class SimulationBuilder {
 
@@ -20,6 +25,39 @@ public class SimulationBuilder {
 	}
 	
 	public void withLine(LineToken token) {
-		throw new UnsupportedOperationException("not yet implemented");
+		if(MountainLineToken.class.isInstance(token)) {
+			withMountainLine((MountainLineToken) token);
+		}
+		if(TreasureLineToken.class.isInstance(token)) {
+			withTreasureLine((TreasureLineToken) token);
+		}
+		if(AdventurerLineToken.class.isInstance(token)) {
+			withAdventurerLine((AdventurerLineToken) token);
+		}
+	}
+
+	private void withAdventurerLine(AdventurerLineToken token) {
+		if(isOutbounds(token.getStartingPosition())) {
+			throw new OutboundTerrainException();
+		}
+	}
+
+	private void withTreasureLine(TreasureLineToken token) {
+		if(isOutbounds(token.getPosition())) {
+			throw new OutboundTerrainException();
+		}
+		
+	}
+
+	private void withMountainLine(MountainLineToken token) {
+		if(isOutbounds(token.getPosition())) {
+			throw new OutboundTerrainException();
+		}
+	}
+
+	private boolean isOutbounds(Position position) {
+		int horizontalPosition = position.getHorizontalPosition();
+		int verticalPosition = position.getVerticalPosition();
+		return horizontalPosition < 0 || horizontalPosition >= horizontalNbOfBoxes || verticalPosition < 0 || verticalPosition >= verticalNbOfBoxes;
 	}
 }
