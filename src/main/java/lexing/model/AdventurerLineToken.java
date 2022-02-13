@@ -1,5 +1,5 @@
 package lexing.model;
-import java.util.Queue;
+import java.util.List;
 
 import simulation.model.AdventurerAction;
 import simulation.model.Orientation;
@@ -10,10 +10,10 @@ public class AdventurerLineToken implements LineToken {
 	private String name;
 	private Position startingPosition;
 	private Orientation startingOrientation;
-	private Queue<AdventurerAction> adventurerActions;
+	private List<AdventurerAction> adventurerActions;
 
 	public AdventurerLineToken(String name, int horizontalPosition, int verticalPosition, Orientation startingOrientation,
-			Queue<AdventurerAction> adventurerActions) {
+			List<AdventurerAction> adventurerActions) {
 		this.name = name;
 		this.startingPosition = new Position(horizontalPosition, verticalPosition);
 		this.startingOrientation = startingOrientation;
@@ -32,7 +32,7 @@ public class AdventurerLineToken implements LineToken {
 		return name;
 	}
 
-	public Queue<AdventurerAction> getSequenceOfAction() {
+	public List<AdventurerAction> getSequenceOfAction() {
 		return adventurerActions;
 	}
 

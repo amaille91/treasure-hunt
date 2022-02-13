@@ -16,10 +16,10 @@ import parsing.exceptions.IllegalMapSizeException;
 import parsing.exceptions.NoMapException;
 import parsing.exceptions.OutboundTerrainException;
 import parsing.exceptions.TooManyMapsException;
+import simulation.Simulation;
 import simulation.model.Adventurer;
 import simulation.model.Mountain;
 import simulation.model.Position;
-import simulation.model.Simulation;
 import simulation.model.Terrain;
 import simulation.model.Treasure;
 
@@ -57,7 +57,7 @@ public class Parser {
 	}
 	
 	public Simulation getSimulation() {
-		return new Simulation(this);
+		return new Simulation(horizontalNbOfBoxes, verticalNbOfBoxes, map);
 	}
 
 	private static MapLineToken retrieveMapLine(List<LineToken> tokens) {
