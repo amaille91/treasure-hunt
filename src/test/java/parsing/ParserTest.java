@@ -23,7 +23,7 @@ import parsing.exceptions.OutboundTerrainException;
 import parsing.exceptions.TooManyMapsException;
 import simulation.model.AdventurerAction;
 
-public class SimulationBuilderTest {
+public class ParserTest {
 	
 	@Test
 	void parsing_tokens_without_a_map_token_should_result_in_NoMapException() throws Exception {
