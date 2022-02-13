@@ -1,0 +1,19 @@
+# Building
+
+`mvn clean install -DskipTests`
+
+# Testing locally
+
+`mvn verify`
+
+# Running
+
+`java -jar target\treasure-hunt-0.0.1-SNAPSHOT.jar "src/test/resources/simple-example.txt"`
+
+N.B. The output is produced in the same directory as the input
+
+# Further improvements
+
+- Use of Dependency Injection to make tests more 'unital' ==> mock sub services
+- add the possibility to configure the output folder
+- try a Property-based testing approach ==> Need a more structured model
