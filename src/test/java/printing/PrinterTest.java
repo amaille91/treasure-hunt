@@ -44,4 +44,17 @@ public class PrinterTest {
 		
 		assertThat(lines).startsWith("C - 3 - 4", "M - 0 - 0", "M - 2 - 3", "T - 0 - 2 - 1", "T - 1 - 2 - 2");
 	}
+	
+	@Test
+	void adventurers_should_be_printed_at_the_end_in_their_position_order() throws Exception {
+		List<String> lines = Printer.toStrings(3, 4,
+				Map.of( new Position(2, 3), new Mountain(),
+						new Position(2, 2), new Adventurer("Adventurer", Orientation.WEST, List.of(), 3, 0),
+						new Position(1, 2), new Treasure(2),
+						new Position(0, 0), new Mountain(),
+						new Position(0, 2), new Treasure(1),
+						new Position(1, 3), new Adventurer("Adventurer2", Orientation.EAST, List.of(), 0, 1)));
+		
+		assertThat(lines).endsWith("A - Adventurer2 - 1 - 3 - E - 0", "A - Adventurer - 2 - 2 - W - 3");
+	}
 }
