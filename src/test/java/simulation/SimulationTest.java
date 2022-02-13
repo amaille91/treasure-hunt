@@ -1,6 +1,9 @@
 package simulation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static simulation.model.AdventurerAction.ADVANCE;
+import static simulation.model.AdventurerAction.TURN_LEFT;
+import static simulation.model.AdventurerAction.TURN_RIGHT;
 
 import java.util.List;
 import java.util.Map;
@@ -255,6 +258,27 @@ public class SimulationTest {
 			
 			assertThat(finalState).containsExactlyInAnyOrderEntriesOf(expectedFinalState);
 		}
+	}
+	
+	@Test
+	void the_simulation_should_give_back_coherent_results_with_the_example() throws Exception {
+		List<AdventurerAction> listOfActions = Lists.list(ADVANCE, ADVANCE, TURN_RIGHT, ADVANCE, TURN_RIGHT, ADVANCE, TURN_LEFT, TURN_LEFT, ADVANCE);
+		Map<Position, Terrain> map = Map.of(new Position(1, 0), new Mountain(),
+				new Position(2, 1), new Mountain(),
+				new Position(0, 3), new Treasure(2),
+				new Position(1, 3), new Treasure(3),
+				new Position(1, 1), new Adventurer("Lara", Orientation.SOUTH, listOfActions, 0, 0));
+		Simulation simulation = new Simulation(3, 4, map);
+		
+		Map<Position, Terrain> finalState = simulation.getFinalState();
+		
+		Adventurer expectedAdventurer = new Adventurer("Lara", Orientation.SOUTH, Lists.list(), 3, 0);
+		Map<Position, Terrain> expectedFinalState = Map.of(new Position(1, 0), new Mountain(),
+				new Position(2, 1), new Mountain(),
+				new Position(0, 3), expectedAdventurer,
+				new Position(1, 3), new Treasure(2));
+		
+		assertThat(finalState).containsExactlyInAnyOrderEntriesOf(expectedFinalState);
 	}
 	
 

@@ -1,6 +1,7 @@
 package simulation;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,7 +33,8 @@ public class Simulation {
 	public Simulation(int horizontalNbOfBoxes, int verticalNbOfBoxes, Map<Position, Terrain> map) {
 		this.horizontalNbOfBoxes = horizontalNbOfBoxes;
 		this.verticalNbOfBoxes = verticalNbOfBoxes;
-		this.map = map;
+		this.map = new HashMap<>();
+		this.map.putAll(map);
 	}
 
 	public Map<Position, Terrain> getFinalState() {
