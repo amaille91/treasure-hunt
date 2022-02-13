@@ -26,7 +26,7 @@ public class Parser {
 		if(mapLines.size() > 1) {
 			throw new TooManyMapsException();
 		}
-		throw new UnsupportedOperationException("not yet implemented");
+		return (MapLineToken) mapLines.get(0);
 	}
 
 }
