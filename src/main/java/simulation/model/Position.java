@@ -1,5 +1,7 @@
 package simulation.model;
 
+import java.util.Objects;
+
 public class Position {
 
 	private int horizontalPosition;
@@ -16,6 +18,23 @@ public class Position {
 
 	public int getVerticalPosition() {
 		return verticalPosition;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(horizontalPosition, verticalPosition);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Position other = (Position) obj;
+		return horizontalPosition == other.horizontalPosition && verticalPosition == other.verticalPosition;
 	}
 
 }
